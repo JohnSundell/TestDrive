@@ -39,7 +39,8 @@ $ testdrive Unbox -p tvOS
 The easiest way to install Test Drive is using [Marathon](https://github.com/johnsundell/marathon):
 
 ```
-$ marathon install https://raw.githubusercontent.com/JohnSundell/TestDrive/master/Sources/TestDrive.swift
+$ git clone git@github.com:JohnSundell/TestDrive.git
+$ marathon install TestDrive/Sources/TestDrive.swift
 ```
 
 You can also install it using the Swift Package Manager:
