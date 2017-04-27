@@ -1,0 +1,36 @@
+{
+  "autoPin": true,
+  "pins": [
+    {
+      "package": "Files",
+      "reason": null,
+      "repositoryURL": "git@github.com:johnsundell/files.git",
+      "version": "1.7.0"
+    },
+    {
+      "package": "Releases",
+      "reason": null,
+      "repositoryURL": "git@github.com:johnsundell/releases.git",
+      "version": "1.0.1"
+    },
+    {
+      "package": "Require",
+      "reason": null,
+      "repositoryURL": "git@github.com:johnsundell/require.git",
+      "version": "1.0.2"
+    },
+    {
+      "package": "ShellOut",
+      "reason": null,
+      "repositoryURL": "git@github.com:johnsundell/shellout.git",
+      "version": "1.1.0"
+    },
+    {
+      "package": "Xgen",
+      "reason": null,
+      "repositoryURL": "git@github.com:johnsundell/xgen.git",
+      "version": "1.0.0"
+    }
+  ],
+  "version": 1
+}
