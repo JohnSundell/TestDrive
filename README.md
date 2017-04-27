@@ -2,6 +2,10 @@
 
 With Test Drive, you can quickly try out **any** Swift pod or framework in a playground. Simply run `testdive` followed by the name of a pod, or the URL to a Git repository and you will have a playground generated for you in no time!
 
+<p align="center">
+  <img src="TestDrive.gif"/>
+</p>
+
 **Features**
 
 - [X] Quickly try out a pod/framework without having to modify your project.
