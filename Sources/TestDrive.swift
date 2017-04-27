@@ -2,9 +2,7 @@ import Foundation
 import Xgen
 import Files
 import ShellOut
-import Require
 import Releases
-import Unbox
 
 // MARK: - Extensions
 
@@ -168,9 +166,7 @@ class PackageLoader {
             urlString.append(".git")
         }
 
-        let name = urlString.components(separatedBy: "/")
-                            .last
-                            .require()
+        let name = urlString.components(separatedBy: "/").last!
                             .replacingOccurrences(of: ".git", with: "")
 
         print("📦  Cloning \(urlString)...")
