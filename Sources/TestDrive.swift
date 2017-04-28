@@ -135,7 +135,8 @@ class PackageLoader {
     private func loadPackageForPod(named name: String) throws -> Package {
         print("🕵️‍♀️  Finding pod '\(name)'...")
 
-        let searchResult = try shellOut(to: "pod search \(name)")
+        let name = name.lowercased()
+        let searchResult = try shellOut(to: "pod search \(name)").lowercased()
         var foundPod = false
 
         for line in searchResult.components(separatedBy: .newlines) {
@@ -144,11 +145,11 @@ class PackageLoader {
                 continue
             }
 
-            guard line.contains("- Source:") else {
+            guard line.contains("- source:") else {
                 continue
             }
 
-            let source = line.replacingOccurrences(of: "- Source:", with: "")
+            let source = line.replacingOccurrences(of: "- source:", with: "")
                              .trimmingCharacters(in: .whitespaces)
 
             guard let sourceURL = URL(string: source) else {
@@ -156,10 +157,6 @@ class PackageLoader {
             }
 
             return try loadPackage(from: sourceURL)
-        }
-
-        guard searchResult.hasPrefix("\n-> \(name)") else {
-            throw TestDriveError.invalidPodName(name)
         }
 
         throw TestDriveError.invalidPodName(name)
