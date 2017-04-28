@@ -1,6 +1,6 @@
 # Test Drive 🚘
 
-With Test Drive, you can quickly try out **any** Swift pod or framework in a playground. Simply run `testdive` followed by the name of a pod, or the URL to a Git repository, and you will have a playground generated for you in no time!
+With Test Drive, you can quickly try out **any** Swift pod or framework in a playground. Simply run `testdrive` followed by the name of a pod, or the URL to a Git repository, and you will have a playground generated for you in no time!
 
 <p align="center">
   <img src="TestDrive.gif"/>
