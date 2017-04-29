@@ -104,7 +104,7 @@ enum Target {
 struct Package {
     let name: String
     let folder: Folder
-    let subFolder: Folder?
+    let path: String
 }
 
 class PackageLoader {
@@ -183,20 +183,13 @@ class PackageLoader {
             print("📋  Checking out version \(latestRelease)...")
             try shellOut(to: "git checkout \(latestRelease) --quiet", at: repositoryFolder.path)
         }
-
-        for subfolder in repositoryFolder.subfolders {
-            if subfolder.extension == "xcodeproj" {
+        
+        for subfolder in repositoryFolder.makeSubfolderSequence(recursive: true) {
+            if subfolder.extension == "xcodeproj" && !subfolder.name.lowercased().contains("demo") {
+                let path = subfolder.path.replacingOccurrences(of: repositoryFolder.parent!.path, with: "")
                 let packageName = subfolder.nameExcludingExtension
                 print("🚗  \(packageName) is ready for test drive\n")
-                return Package(name: packageName, folder: repositoryFolder, subFolder: nil)
-            }
-            
-            for subsubfolder in subfolder.subfolders {
-                if subsubfolder.extension == "xcodeproj" {
-                    let packageName = subsubfolder.nameExcludingExtension
-                    print("🚗  \(packageName) is ready for test drive\n")
-                    return Package(name: packageName, folder: repositoryFolder, subFolder: subfolder)
-                }
+                return Package(name: packageName, folder: repositoryFolder, path: path)
             }
         }
 
@@ -245,7 +238,7 @@ do {
 
     for package in packages {
         try package.folder.move(to: projectsFolder)
-        let projectPath = "\(workspaceName)/Projects/\(package.folder.name)" + (package.subFolder != nil ? "/\(package.subFolder!.name)" : "") + "/\(package.name).xcodeproj"
+        let projectPath = "\(workspaceName)/Projects/\(package.path)"
         workspace.addProject(at: projectPath)
     }
 
