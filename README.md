@@ -1,4 +1,8 @@
 # Test Drive 🚘
+[![Swift 3.1](https://img.shields.io/badge/swift-3.1-orange.svg?style=flat)](#)
+[![Marathon](https://img.shields.io/badge/marathon-compatible-brightgreen.svg?style=flat)](https://github.com/johnsundell/marathon)
+[![SPM](https://img.shields.io/badge/spm-compatible-brightgreen.svg?style=flat)](https://github.com/apple/swift-package-manager)
+[![@johnsundell](https://img.shields.io/badge/contact-@johnsundell-blue.svg?style=flat)](https://twitter.com/johnsundell)
 
 With Test Drive, you can quickly try out **any** Swift pod or framework in a playground. Simply run `testdrive` followed by the name of a pod, or the URL to a Git repository, and you will have a playground generated for you in no time!
 
