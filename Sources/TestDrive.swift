@@ -104,7 +104,7 @@ enum Target {
 struct Package {
     let name: String
     let folder: Folder
-    let path: String
+    let projectPath: String
 }
 
 class PackageLoader {
@@ -186,10 +186,10 @@ class PackageLoader {
         
         for subfolder in repositoryFolder.makeSubfolderSequence(recursive: true) {
             if subfolder.extension == "xcodeproj" && !subfolder.name.lowercased().contains("demo") {
-                let path = subfolder.path.replacingOccurrences(of: repositoryFolder.parent!.path, with: "")
+                let projectPath = subfolder.path.replacingOccurrences(of: repositoryFolder.parent!.path, with: "")
                 let packageName = subfolder.nameExcludingExtension
                 print("🚗  \(packageName) is ready for test drive\n")
-                return Package(name: packageName, folder: repositoryFolder, path: path)
+                return Package(name: packageName, folder: repositoryFolder, projectPath: projectPath)
             }
         }
 
@@ -238,7 +238,7 @@ do {
 
     for package in packages {
         try package.folder.move(to: projectsFolder)
-        let projectPath = "\(workspaceName)/Projects/\(package.path)"
+        let projectPath = "\(workspaceName)/Projects/\(package.projectPath)"
         workspace.addProject(at: projectPath)
     }
 
