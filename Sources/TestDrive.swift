@@ -119,7 +119,7 @@ class PackageLoader {
     }
 
     func loadPackages(for targets: [Target]) throws -> [Package] {
-        return try targets.map { target in
+        return try targets.flatMap { target in
             switch target {
             case .pod(let name):
                 return try loadPackageForPod(named: name)
@@ -133,7 +133,7 @@ class PackageLoader {
         try? folder.delete()
     }
 
-    private func loadPackageForPod(named name: String) throws -> Package {
+    private func loadPackageForPod(named name: String) throws -> Package? {
         print("🕵️‍♀️  Finding pod '\(name)'...")
 
         let name = name.lowercased()
@@ -163,7 +163,7 @@ class PackageLoader {
         throw TestDriveError.invalidPodName(name)
     }
 
-    private func loadPackage(from url: URL) throws -> Package {
+    private func loadPackage(from url: URL) throws -> Package? {
         var urlString = url.absoluteString
 
         if !urlString.hasSuffix(".git") {
@@ -172,6 +172,11 @@ class PackageLoader {
 
         let name = urlString.components(separatedBy: "/").last!
                             .replacingOccurrences(of: ".git", with: "")
+
+        guard !folder.containsSubfolder(named: name) else {
+            print("♻️  Reusing clone of \(name)\n")
+            return nil
+        }
 
         print("📦  Cloning \(urlString)...")
         try shellOut(to: "git clone \(urlString) \(name) --quiet", at: folder.path)
@@ -183,7 +188,7 @@ class PackageLoader {
             print("📋  Checking out version \(latestRelease)...")
             try shellOut(to: "git checkout \(latestRelease) --quiet", at: repositoryFolder.path)
         }
-        
+
         for subfolder in repositoryFolder.makeSubfolderSequence(recursive: true) {
             if subfolder.extension == "xcodeproj" && !subfolder.name.lowercased().contains("demo") {
                 let projectPath = subfolder.path.replacingOccurrences(of: repositoryFolder.parent!.path, with: "")
