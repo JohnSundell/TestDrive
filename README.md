@@ -38,6 +38,12 @@ $ testdrive Unbox Wrap
 $ testdrive Unbox -p tvOS
 ```
 
+🚓  Use a specific version for your test drive (the latest version is used by default):
+```
+$ testdrive Unbox -v 2.3.0
+$ testdrive Wrap --master
+```
+
 ## Installation
 
 The easiest way to install Test Drive is using [Marathon](https://github.com/johnsundell/marathon):

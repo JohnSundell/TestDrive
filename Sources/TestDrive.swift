@@ -16,6 +16,7 @@ extension CommandLine {
     static func parseArguments() throws -> Arguments {
         var parsedArguments = Arguments()
         var expectingPlatform = false
+        var expectingVersion = false
 
         for argument in arguments[1..<arguments.count] {
             if expectingPlatform {
@@ -24,21 +25,32 @@ extension CommandLine {
                 }
 
                 parsedArguments.platform = platform
+                expectingPlatform = false
+                continue
+            } else if expectingVersion {
+                let version = try Version(string: argument)
+                parsedArguments.addTagToLastTarget(.version(version))
+                expectingVersion = false
                 continue
             }
 
-            if argument == "-p" {
+            switch argument {
+            case "--platform", "-p":
                 expectingPlatform = true
-                continue
+            case "--version", "-v":
+                expectingVersion = true
+            case "--master", "-m":
+                parsedArguments.addTagToLastTarget(.master)
+            default:
+                let target = try Target(kind: targetKind(from: argument), tag: .latestVersion)
+                parsedArguments.targets.append(target)
             }
-
-            try parsedArguments.targets.append(target(from: argument))
         }
 
         return parsedArguments
     }
 
-    private static func target(from argument: String) throws -> Target {
+    private static func targetKind(from argument: String) throws -> Target.Kind {
         if argument.hasSuffix(".git") {
             guard let url = URL(string: argument) else {
                 throw TestDriveError.invalidURL(argument)
@@ -96,9 +108,31 @@ struct Arguments {
     var platform = Playground.Platform.iOS
 }
 
-enum Target {
-    case pod(String)
-    case repository(URL)
+extension Arguments {
+    mutating func addTagToLastTarget(_ tag: Tag) {
+        guard var target = targets.popLast() else {
+            return
+        }
+
+        target.tag = tag
+        targets.append(target)
+    }
+}
+
+enum Tag {
+    case master
+    case version(Version)
+    case latestVersion
+}
+
+struct Target {
+    enum Kind {
+        case pod(String)
+        case repository(URL)
+    }
+
+    var kind: Kind
+    var tag: Tag
 }
 
 struct Package {
@@ -120,11 +154,11 @@ class PackageLoader {
 
     func loadPackages(for targets: [Target]) throws -> [Package] {
         return try targets.flatMap { target in
-            switch target {
+            switch target.kind {
             case .pod(let name):
-                return try loadPackageForPod(named: name)
+                return try loadPackageForPod(named: name, checkoutTag: target.tag)
             case .repository(let url):
-                return try loadPackage(from: url)
+                return try loadPackage(from: url, checkoutTag: target.tag)
             }
         }
     }
@@ -133,7 +167,7 @@ class PackageLoader {
         try? folder.delete()
     }
 
-    private func loadPackageForPod(named name: String) throws -> Package? {
+    private func loadPackageForPod(named name: String, checkoutTag: Tag) throws -> Package? {
         print("🕵️‍♀️  Finding pod '\(name)'...")
 
         let name = name.lowercased()
@@ -157,13 +191,13 @@ class PackageLoader {
                 throw TestDriveError.invalidPodSourceURL(source)
             }
 
-            return try loadPackage(from: sourceURL)
+            return try loadPackage(from: sourceURL, checkoutTag: checkoutTag)
         }
 
         throw TestDriveError.invalidPodName(name)
     }
 
-    private func loadPackage(from url: URL) throws -> Package? {
+    private func loadPackage(from url: URL, checkoutTag: Tag) throws -> Package? {
         var urlString = url.absoluteString
 
         if !urlString.hasSuffix(".git") {
@@ -182,13 +216,9 @@ class PackageLoader {
         try shellOut(to: "git clone \(urlString) \(name) --quiet", at: folder.path)
         let repositoryFolder = try folder.subfolder(named: name)
 
-        print("🚢  Resolving latest version...")
-
-        if let latestRelease = try Releases.versions(for: url).sorted().last {
-            print("📋  Checking out version \(latestRelease)...")
-            try shellOut(to: "git checkout \(latestRelease) --quiet", at: repositoryFolder.path)
-        }
-
+        let checkoutIdentifier = try resolveCheckoutIdentifier(for: checkoutTag, url: url)
+        print("📋  Checking out \(checkoutIdentifier)...")
+        try shellOut(to: "git checkout \(checkoutIdentifier) --quiet", at: repositoryFolder.path)
         try shellOut(to: "git submodule update --init --recursive --quiet", at: repositoryFolder.path)
 
         for subfolder in repositoryFolder.makeSubfolderSequence(recursive: true) {
@@ -202,6 +232,23 @@ class PackageLoader {
 
         throw TestDriveError.missingXcodeProject(url)
     }
+
+    private func resolveCheckoutIdentifier(for tag: Tag, url: URL) throws -> String {
+        switch tag {
+        case .latestVersion:
+            print("🚢  Resolving latest version...")
+
+            guard let latestVersion = try Releases.versions(for: url).sorted().last else {
+                return "master"
+            }
+
+            return latestVersion.string
+        case .master:
+            return "master"
+        case .version(let version):
+            return version.string
+        }
+    }
 }
 
 // MARK: - Functions
@@ -213,10 +260,12 @@ func printHelp() {
     print("\nUsage:")
     print("- Simply pass a list of pod names or URLs that you want to test drive.")
     print("- You can also specify a platform (iOS, macOS or tvOS) using the '-p' option")
+    print("- To use a specific version, use the '-v' argument (or '-m' for master)")
     print("\nExamples:")
     print("- testdrive Unbox Wrap Files")
     print("- testdrive https://github.com/johnsundell/unbox.git Wrap Files")
     print("- testdrive Unbox -p tvOS")
+    print("- testdrive Unbox -v 2.3.0")
 }
 
 // MARK: - Script
