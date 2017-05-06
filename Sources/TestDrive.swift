@@ -17,6 +17,7 @@ extension CommandLine {
         var parsedArguments = Arguments()
         var expectingPlatform = false
         var expectingVersion = false
+        var expectingBranch = false
 
         for argument in arguments[1..<arguments.count] {
             if expectingPlatform {
@@ -32,6 +33,11 @@ extension CommandLine {
                 parsedArguments.addTagToLastTarget(.version(version))
                 expectingVersion = false
                 continue
+            } else if expectingBranch {
+                let branch = argument
+                parsedArguments.addTagToLastTarget(.branch(branch))
+                expectingBranch = false
+                continue
             }
 
             switch argument {
@@ -41,6 +47,8 @@ extension CommandLine {
                 expectingVersion = true
             case "--master", "-m":
                 parsedArguments.addTagToLastTarget(.master)
+            case "--branch", "-b":
+                expectingBranch = true
             default:
                 let target = try Target(kind: targetKind(from: argument), tag: .latestVersion)
                 parsedArguments.targets.append(target)
@@ -121,6 +129,7 @@ extension Arguments {
 
 enum Tag {
     case master
+    case branch(String)
     case version(Version)
     case latestVersion
 }
@@ -245,6 +254,8 @@ class PackageLoader {
             return latestVersion.string
         case .master:
             return "master"
+        case .branch(let branch):
+            return branch
         case .version(let version):
             return version.string
         }
@@ -266,6 +277,7 @@ func printHelp() {
     print("- testdrive https://github.com/johnsundell/unbox.git Wrap Files")
     print("- testdrive Unbox -p tvOS")
     print("- testdrive Unbox -v 2.3.0")
+    print("- testdrive Unbox -b swift3")
 }
 
 // MARK: - Script
