@@ -16,8 +16,7 @@ extension CommandLine {
     static func parseArguments() throws -> Arguments {
         var parsedArguments = Arguments()
         var expectingPlatform = false
-        var expectingVersion = false
-        var expectingBranch = false
+        var expectingCheckout = false
 
         for argument in arguments[1..<arguments.count] {
             if expectingPlatform {
@@ -28,27 +27,19 @@ extension CommandLine {
                 parsedArguments.platform = platform
                 expectingPlatform = false
                 continue
-            } else if expectingVersion {
-                let version = try Version(string: argument)
-                parsedArguments.addTagToLastTarget(.version(version))
-                expectingVersion = false
-                continue
-            } else if expectingBranch {
-                let branch = argument
-                parsedArguments.addTagToLastTarget(.branch(branch))
-                expectingBranch = false
+            } else if expectingCheckout {
+                parsedArguments.addTagToLastTarget(.checkout(argument))
+                expectingCheckout = false
                 continue
             }
 
             switch argument {
             case "--platform", "-p":
                 expectingPlatform = true
-            case "--version", "-v":
-                expectingVersion = true
             case "--master", "-m":
                 parsedArguments.addTagToLastTarget(.master)
-            case "--branch", "-b":
-                expectingBranch = true
+            case "--checkout", "-c":
+                expectingCheckout = true
             default:
                 let target = try Target(kind: targetKind(from: argument), tag: .latestVersion)
                 parsedArguments.targets.append(target)
@@ -129,8 +120,7 @@ extension Arguments {
 
 enum Tag {
     case master
-    case branch(String)
-    case version(Version)
+    case checkout(String)
     case latestVersion
 }
 
@@ -254,10 +244,8 @@ class PackageLoader {
             return latestVersion.string
         case .master:
             return "master"
-        case .branch(let branch):
-            return branch
-        case .version(let version):
-            return version.string
+        case .checkout(let identifier):
+            return identifier
         }
     }
 }
@@ -271,13 +259,13 @@ func printHelp() {
     print("\nUsage:")
     print("- Simply pass a list of pod names or URLs that you want to test drive.")
     print("- You can also specify a platform (iOS, macOS or tvOS) using the '-p' option")
-    print("- To use a specific version, use the '-v' argument (or '-m' for master)")
+    print("- To use a specific version or branch, use the '-c' argument (or '-m' for master)")
     print("\nExamples:")
     print("- testdrive Unbox Wrap Files")
     print("- testdrive https://github.com/johnsundell/unbox.git Wrap Files")
     print("- testdrive Unbox -p tvOS")
-    print("- testdrive Unbox -v 2.3.0")
-    print("- testdrive Unbox -b swift3")
+    print("- testdrive Unbox -c 2.3.0")
+    print("- testdrive Unbox -c swift3")
 }
 
 // MARK: - Script
