@@ -36,10 +36,10 @@ extension CommandLine {
             switch argument {
             case "--platform", "-p":
                 expectingPlatform = true
+            case "--version", "-v":
+                expectingCheckout = true
             case "--master", "-m":
                 parsedArguments.addTagToLastTarget(.master)
-            case "--checkout", "-c":
-                expectingCheckout = true
             default:
                 let target = try Target(kind: targetKind(from: argument), tag: .latestVersion)
                 parsedArguments.targets.append(target)
@@ -259,13 +259,13 @@ func printHelp() {
     print("\nUsage:")
     print("- Simply pass a list of pod names or URLs that you want to test drive.")
     print("- You can also specify a platform (iOS, macOS or tvOS) using the '-p' option")
-    print("- To use a specific version or branch, use the '-c' argument (or '-m' for master)")
+    print("- To use a specific version or branch, use the '-v' argument (or '-m' for master)")
     print("\nExamples:")
     print("- testdrive Unbox Wrap Files")
     print("- testdrive https://github.com/johnsundell/unbox.git Wrap Files")
     print("- testdrive Unbox -p tvOS")
-    print("- testdrive Unbox -c 2.3.0")
-    print("- testdrive Unbox -c swift3")
+    print("- testdrive Unbox -v 2.3.0")
+    print("- testdrive Unbox -v swift3")
 }
 
 // MARK: - Script

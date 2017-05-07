@@ -40,8 +40,8 @@ $ testdrive Unbox -p tvOS
 
 🚓  Use a specific version or branch for your test drive (the latest version is used by default):
 ```
-$ testdrive Unbox -c 2.3.0
-$ testdrive Unbox -c swift3
+$ testdrive Unbox -v 2.3.0
+$ testdrive Unbox -v swift3
 $ testdrive Wrap --master
 ```
 
