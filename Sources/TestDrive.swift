@@ -16,7 +16,7 @@ extension CommandLine {
     static func parseArguments() throws -> Arguments {
         var parsedArguments = Arguments()
         var expectingPlatform = false
-        var expectingVersion = false
+        var expectingCheckout = false
 
         for argument in arguments[1..<arguments.count] {
             if expectingPlatform {
@@ -27,10 +27,9 @@ extension CommandLine {
                 parsedArguments.platform = platform
                 expectingPlatform = false
                 continue
-            } else if expectingVersion {
-                let version = try Version(string: argument)
-                parsedArguments.addTagToLastTarget(.version(version))
-                expectingVersion = false
+            } else if expectingCheckout {
+                parsedArguments.addTagToLastTarget(.checkout(argument))
+                expectingCheckout = false
                 continue
             }
 
@@ -38,7 +37,7 @@ extension CommandLine {
             case "--platform", "-p":
                 expectingPlatform = true
             case "--version", "-v":
-                expectingVersion = true
+                expectingCheckout = true
             case "--master", "-m":
                 parsedArguments.addTagToLastTarget(.master)
             default:
@@ -121,7 +120,7 @@ extension Arguments {
 
 enum Tag {
     case master
-    case version(Version)
+    case checkout(String)
     case latestVersion
 }
 
@@ -245,8 +244,8 @@ class PackageLoader {
             return latestVersion.string
         case .master:
             return "master"
-        case .version(let version):
-            return version.string
+        case .checkout(let identifier):
+            return identifier
         }
     }
 }
@@ -260,12 +259,13 @@ func printHelp() {
     print("\nUsage:")
     print("- Simply pass a list of pod names or URLs that you want to test drive.")
     print("- You can also specify a platform (iOS, macOS or tvOS) using the '-p' option")
-    print("- To use a specific version, use the '-v' argument (or '-m' for master)")
+    print("- To use a specific version or branch, use the '-v' argument (or '-m' for master)")
     print("\nExamples:")
     print("- testdrive Unbox Wrap Files")
     print("- testdrive https://github.com/johnsundell/unbox.git Wrap Files")
     print("- testdrive Unbox -p tvOS")
     print("- testdrive Unbox -v 2.3.0")
+    print("- testdrive Unbox -v swift3")
 }
 
 // MARK: - Script
