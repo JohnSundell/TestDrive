@@ -170,7 +170,7 @@ class PackageLoader {
         print("🕵️‍♀️  Finding pod '\(name)'...")
 
         let name = name.lowercased()
-        let searchResult = try shellOut(to: "pod search \(name)").lowercased()
+        let searchResult = try shellOut(to: "pod search \(name) --simple").lowercased()
         var foundPod = false
 
         for line in searchResult.components(separatedBy: .newlines) {
