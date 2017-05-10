@@ -231,7 +231,7 @@ do {
 
     let packageLoader = try PackageLoader()
     let packages = try packageLoader.loadPackages(for: arguments.targets)
-    let packageNames = packages.map({ $0.name })
+    let packageNames = packages.map { $0.name }
 
     let workspaceName = "TestDrive-\(packageNames.joined(separator: "-")).xcworkspace"
     let workspaceFolder = try FileSystem().createFolder(at: workspaceName)
