@@ -221,7 +221,12 @@ class PackageLoader {
         try shellOut(to: "git submodule update --init --recursive --quiet", at: repositoryFolder.path)
 
         for subfolder in repositoryFolder.makeSubfolderSequence(recursive: true) {
-            if subfolder.extension == "xcodeproj" && !subfolder.name.lowercased().contains("demo") {
+            let lowercasedName = subfolder.name.lowercased()
+            if subfolder.extension == "xcodeproj"
+                && !lowercasedName.contains("demo")
+                && !lowercasedName.contains("sample")
+                && !lowercasedName.contains("example") {
+
                 let projectPath = subfolder.path.replacingOccurrences(of: repositoryFolder.parent!.path, with: "")
                 let packageName = subfolder.nameExcludingExtension
                 print("🚗  \(packageName) is ready for test drive\n")
