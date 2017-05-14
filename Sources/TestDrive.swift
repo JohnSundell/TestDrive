@@ -221,12 +221,7 @@ class PackageLoader {
         try shellOut(to: "git submodule update --init --recursive --quiet", at: repositoryFolder.path)
 
         for subfolder in repositoryFolder.makeSubfolderSequence(recursive: true) {
-            let lowercasedName = subfolder.name.lowercased()
-            if subfolder.extension == "xcodeproj"
-                && !lowercasedName.contains("demo")
-                && !lowercasedName.contains("sample")
-                && !lowercasedName.contains("example") {
-
+            if subfolder.extension == "xcodeproj" && isValidatedFolder(named: subfolder.name) {
                 let projectPath = subfolder.path.replacingOccurrences(of: repositoryFolder.parent!.path, with: "")
                 let packageName = subfolder.nameExcludingExtension
                 print("🚗  \(packageName) is ready for test drive\n")
@@ -252,6 +247,16 @@ class PackageLoader {
         case .checkout(let identifier):
             return identifier
         }
+    }
+
+    private func isValidatedFolder(named name: String) -> Bool {
+        let lowercasedName = name.lowercased()
+        for invalidName in ["demo", "sample", "example"] {
+            if lowercasedName.contains(invalidName) {
+                return false
+            }
+        }
+        return true
     }
 }
 
