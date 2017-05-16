@@ -17,10 +17,10 @@ try scriptData.write(to: mainURL)
 let package = Package(
     name: "TestDrive",
     dependencies: [
-        .Package(url: "git@github.com:johnsundell/xgen.git", majorVersion: 1),
-        .Package(url: "git@github.com:johnsundell/files.git", majorVersion: 1),
-        .Package(url: "git@github.com:johnsundell/shellout.git", majorVersion: 1),
-        .Package(url: "git@github.com:johnsundell/releases.git", majorVersion: 1)
+        .Package(url: "https://github.com/JohnSundell/Xgen.git", majorVersion: 1),
+        .Package(url: "https://github.com/JohnSundell/Files.git", majorVersion: 1),
+        .Package(url: "https://github.com/JohnSundell/ShellOut.git", majorVersion: 1),
+        .Package(url: "https://github.com/JohnSundell/Releases.git", majorVersion: 1)
     ],
     exclude: ["Sources/TestDrive.swift"]
 )
