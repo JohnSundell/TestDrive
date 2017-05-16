@@ -61,7 +61,7 @@ extension CommandLine {
         if argument.contains("github.com/") {
             let components = argument.components(separatedBy: "github.com/")
 
-            guard let url = URL(string: "git@github.com:\(components[1])") else {
+            guard let url = URL(string: "https://github.com/\(components[1])") else {
                 throw TestDriveError.invalidURL(argument)
             }
 
