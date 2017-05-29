@@ -50,8 +50,7 @@ $ testdrive Wrap --master
 The easiest way to install Test Drive is using [Marathon](https://github.com/johnsundell/marathon):
 
 ```
-$ git clone git@github.com:JohnSundell/TestDrive.git
-$ marathon install TestDrive/Sources/TestDrive.swift
+$ marathon install johnsundell/testdrive
 ```
 
 You can also install it using the Swift Package Manager:
