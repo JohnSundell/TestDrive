@@ -202,7 +202,7 @@ class PackageLoader {
             }
 
             let source = line.replacingOccurrences(of: "- source:", with: "")
-                             .trimmingCharacters(in: .whitespaces)
+                .trimmingCharacters(in: .whitespaces)
 
             guard let sourceURL = URL(string: source) else {
                 throw TestDriveError.invalidPodSourceURL(source)
@@ -222,7 +222,7 @@ class PackageLoader {
         }
 
         let name = urlString.components(separatedBy: "/").last!
-                            .replacingOccurrences(of: ".git", with: "")
+            .replacingOccurrences(of: ".git", with: "")
 
         guard !folder.containsSubfolder(named: name) else {
             print("♻️  Reusing clone of \(name)\n")

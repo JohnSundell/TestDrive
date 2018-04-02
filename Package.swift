@@ -1,3 +1,5 @@
+// swift-tools-version:4.1
+
 /**
  *  TestDrive
  *  Copyright (c) John Sundell 2017
@@ -7,20 +9,20 @@
 import Foundation
 import PackageDescription
 
-// Copy the script into `main.swift` to build a command line tool
-let scriptURL = URL(fileURLWithPath: "Sources/TestDrive.swift")
-let scriptData = try Data(contentsOf: scriptURL)
-
-let mainURL = URL(fileURLWithPath: "Sources/main.swift")
-try scriptData.write(to: mainURL)
-
 let package = Package(
     name: "TestDrive",
     dependencies: [
-        .Package(url: "https://github.com/JohnSundell/Xgen.git", majorVersion: 1),
-        .Package(url: "https://github.com/JohnSundell/Files.git", majorVersion: 1),
-        .Package(url: "https://github.com/JohnSundell/ShellOut.git", majorVersion: 1),
-        .Package(url: "https://github.com/JohnSundell/Releases.git", majorVersion: 1)
+        .package(url: "https://github.com/JohnSundell/Xgen.git", from: "1.0.0"),
+        .package(url: "https://github.com/JohnSundell/Files.git", from: "1.0.0"),
+        .package(url: "https://github.com/JohnSundell/ShellOut.git", from: "1.0.0"),
+        .package(url: "https://github.com/JohnSundell/Releases.git", from: "1.0.0")
     ],
-    exclude: ["Sources/TestDrive.swift"]
+    targets: [
+        .target(
+            name: "TestDrive",
+            dependencies: ["Xgen", "Files", "ShellOut", "Releases"],
+            path: "Sources",
+            exclude: ["Marathonfile"]
+        )
+    ]
 )
