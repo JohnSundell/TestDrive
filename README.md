@@ -56,7 +56,7 @@ $ marathon install johnsundell/testdrive
 You can also install it using the Swift Package Manager:
 
 ```
-$ git clone git@github.com:JohnSundell/TestDrive.git
+$ git clone https://github.com/JohnSundell/TestDrive.git
 $ cd TestDrive
 $ swift build -c release -Xswiftc -static-stdlib
 $ cp -f .build/release/TestDrive /usr/local/bin/testdrive
