@@ -1,5 +1,5 @@
 # Test Drive 🚘
-[![Swift 3.1](https://img.shields.io/badge/swift-3.1-orange.svg?style=flat)](#)
+[![Swift 4.1](https://img.shields.io/badge/swift-4.1-orange.svg?style=flat)](#)
 [![Marathon](https://img.shields.io/badge/marathon-compatible-brightgreen.svg?style=flat)](https://github.com/johnsundell/marathon)
 [![SPM](https://img.shields.io/badge/spm-compatible-brightgreen.svg?style=flat)](https://github.com/apple/swift-package-manager)
 [![@johnsundell](https://img.shields.io/badge/contact-@johnsundell-blue.svg?style=flat)](https://twitter.com/johnsundell)
