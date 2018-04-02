@@ -170,7 +170,7 @@ class PackageLoader {
     }
 
     func loadPackages(for targets: [Target]) throws -> [Package] {
-        return try targets.flatMap { target in
+        return try targets.compactMap { target in
             switch target.kind {
             case .pod(let name):
                 return try loadPackageForPod(named: name, checkoutTag: target.tag)
