@@ -306,6 +306,11 @@ do {
 
     let playground = workspace.addPlayground()
     playground.platform = arguments.platform
+    
+    let allPackageNames = ["UIKit"] + packageNames
+    let importStatements = allPackageNames.map { "import \($0)\n" }
+    let padding = "\n\n"
+    playground.code = importStatements.joined() + padding
 
     let projectsFolder = try Folder(path: workspaceFolder.path).createSubfolderIfNeeded(withName: "Projects")
     try projectsFolder.empty()
