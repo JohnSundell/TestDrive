@@ -247,6 +247,13 @@ class PackageLoader {
             }
         }
 
+        if repositoryFolder.containsFile(named: "Package.swift") {
+            let projectName = "\(name).xcodeproj"
+            try shellOut(to: "swift package generate-xcodeproj --output \(projectName)", at: repositoryFolder.path)
+            print("🚗  \(name) is ready for test drive\n")
+            return Package(name: name, folder: repositoryFolder, projectPath: name + "/" + projectName)
+        }
+
         throw TestDriveError.missingXcodeProject(url)
     }
 
