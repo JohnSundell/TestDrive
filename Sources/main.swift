@@ -319,7 +319,7 @@ do {
     print("⚡️  Generating workspace at \(workspace.path)...")
     try workspace.generate()
 
-    try shellOut(to: "open \(workspace.path)")
+    try shellOut(to: "open \"\(workspace.path)\"")
     print("\n🚘  Test driving \(packageNames.joined(separator: " + "))")
 
     packageLoader.cleanup()
