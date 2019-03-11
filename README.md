@@ -70,4 +70,4 @@ So before you start using this tool, I recommend that you spend a few minutes fa
 
 Thanks for understanding, and I hope you’ll enjoy TestDrive!
 
-— [John](https://twitter.com/johnsundell)
+*— John*
