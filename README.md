@@ -68,4 +68,6 @@ I spend almost all of my available time building tools, content and learning mat
 
 So before you start using this tool, I recommend that you spend a few minutes familiarizing yourself with its internals (it’s all normal Swift code), so that you’ll be able to self-service on any issues or edge cases you might encounter.
 
-Thanks for understanding, and I hope you enjoy TestDrive!
+Thanks for understanding, and I hope you’ll enjoy TestDrive!
+
+— [John](https://twitter.com/johnsundell)
