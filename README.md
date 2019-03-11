@@ -62,8 +62,10 @@ $ swift build -c release -Xswiftc -static-stdlib
 $ cp -f .build/release/TestDrive /usr/local/bin/testdrive
 ```
 
-## Help, feedback or suggestions?
+## Issues + support
 
-- [Open an issue](https://github.com/JohnSundell/TestDrive/issues/new) if you need help, if you found a bug, or if you want to discuss a feature request.
-- [Open a PR](https://github.com/JohnSundell/TestDrive/pull/new/master) if you want to make some change to Test Drive.
-- Contact [@johnsundell on Twitter](https://twitter.com/johnsundell) for discussions, news & announcements about Test Drive & other projects.
+I spend almost all of my available time building tools, content and learning materials for the Swift community — all of which are available to everyone, for free. However, since I’m just one person, I do have to prioritize what I spend my time on — and one thing I’m currently not able to offer is 1:1 support for open source projects. That’s why this repository has Issues disabled. It’s not because I don’t want to help, I really do, I’m just simply not able to.
+
+So before you start using this tool, I recommend that you spend a few minutes familiarizing yourself with its internals (it’s all normal Swift code), so that you’ll be able to self-service on any issues or edge cases you might encounter.
+
+Thanks for understanding, and I hope you enjoy TestDrive!
