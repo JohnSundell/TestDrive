@@ -58,7 +58,7 @@ You can also install it using the Swift Package Manager:
 ```
 $ git clone https://github.com/JohnSundell/TestDrive.git
 $ cd TestDrive
-$ swift build -c release -Xswiftc -static-stdlib
+$ swift build -c release
 $ cp -f .build/release/TestDrive /usr/local/bin/testdrive
 ```
 
