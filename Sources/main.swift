@@ -308,8 +308,8 @@ do {
     let packageNames = packages.map { $0.name }
 
     let workspaceName = "TestDrive-\(packageNames.joined(separator: "-")).xcworkspace"
-    let workspaceFolder = try FileSystem().createFolder(at: workspaceName)
-    let workspace = Workspace(path: workspaceFolder.path)
+    let workspaceFolder = try Folder.current.createSubfolder(named: workspaceName)
+    let workspace = Workspace(path: workspaceName)
 
     let playground = workspace.addPlayground()
     playground.platform = arguments.platform
